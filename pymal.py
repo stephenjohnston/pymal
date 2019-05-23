@@ -88,7 +88,12 @@ def main():
     readline.set_history_length(1000)
 
     while True:
-        rep(repl_env)
+        try:
+            rep(repl_env)
+        except Exception as e:
+            print(f"Error: {e.args[0]a}")
+
+
 
 
 if __name__ == '__main__':
