@@ -91,7 +91,7 @@ def main():
         try:
             rep(repl_env)
         except Exception as e:
-            print(f"Error: {e.args[0]a}")
+            print(f"Error: {e.args[0]}")
 
 
 
