@@ -82,7 +82,7 @@ def num(s):
 
 def read_atom(r):
     tok = r.next()
-    if tok.isnumeric():
+    if tok.isnumeric() or tok.replace('.', '').isnumeric():
         return num(tok)
     elif isinstance(tok, str):
         if tok == 'true':

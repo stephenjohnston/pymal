@@ -86,12 +86,17 @@ def main():
     for k, v in core.ns.items():
         repl_env.set(k, v)
 
+    repl_env.set('eval', lambda ast: mal_eval(ast, repl_env))
+
     readline.set_history_length(1000)
+
+    for s in core.builtins:
+        mal_eval(reader.read_str(s), repl_env)
 
     while True:
         try:
             rep(repl_env)
-        except SystemExit as e:
+        except SystemExit:
             break
         except Exception as e:
             print(f"Error: {e.args[0]}")
