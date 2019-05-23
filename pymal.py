@@ -21,6 +21,7 @@ def eval_ast(ast, environ):
     else:
         return ast
 
+
 def update_env(e, l):
     it = iter(l)
     for x in it:
@@ -75,7 +76,7 @@ def mal_print(mal):
 
 def rep(environ):
     ast = mal_read()
-    if ast != tokenhelp.SpecialToken.COMMENT:
+    if ast != tokenhelp.SpecialToken.COMMENT and (not isinstance(ast, symbols.Symbol) or ast.getVal() != ''):
         e_ast = mal_eval(ast, environ)
         mal_print(e_ast)
 
@@ -90,10 +91,10 @@ def main():
     while True:
         try:
             rep(repl_env)
+        except SystemExit as e:
+            break
         except Exception as e:
             print(f"Error: {e.args[0]}")
-
-
 
 
 if __name__ == '__main__':

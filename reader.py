@@ -40,8 +40,15 @@ def read_form(r):
         return read_list(r)
     elif tok == '[':
         return read_vector(r)
+    elif tok.startswith('"'):
+        return read_string(r)
     else:
         return read_atom(r)
+
+
+def read_string(r):
+    tok = r.next()
+    return tok[1:len(tok)-1]
 
 
 def read_vector(r):

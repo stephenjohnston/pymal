@@ -22,4 +22,4 @@ class Env:
         if env is not None:
             return env[key]
         else:
-            raise Exception(f"Not found {key}")
+            raise Exception(f"undefined identifier: '{key}'")

@@ -10,6 +10,7 @@ ns = {
     '*': lambda a, b: a * b,
     '/': lambda a, b: int(a / b),
     'prn': prn,
+    'str': lambda *x: ''.join(x),
     'list': lambda *x: list(x),
     'list?': lambda x: isinstance(x, list),
     'empty?': lambda x: len(x) == 0,
@@ -18,6 +19,6 @@ ns = {
     '<': lambda a, b: a < b,
     '<=': lambda a, b: a <= b,
     '>': lambda a, b: a > b,
-    '>=': lambda a, b: a >= b
-
+    '>=': lambda a, b: a >= b,
+    'quit': lambda: exit(0)
 }
