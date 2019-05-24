@@ -82,11 +82,13 @@ def multiply(nums):
         x *= i
     return x
 
+
 def divide(nums):
     x = nums[0]
     for i in nums[1:]:
         x /= i
     return x
+
 
 ns = {
     '+': lambda *args: sum(args),
