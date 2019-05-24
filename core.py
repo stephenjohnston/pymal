@@ -1,5 +1,6 @@
 import reader
 import vector
+import tokenhelp
 
 
 def prn(a):
@@ -18,9 +19,24 @@ def my_map(f, l):
         lst = l.getVal()
     else:
         lst = l
+    if isinstance(f, tokenhelp.Function):
+        f = f.get_fn()
     for i in lst:
         rslt.append(f(i))
     return rslt
+
+
+def my_reduce(f, val, l):
+    if isinstance(l, vector.Vector):
+        lst = l.getVal()
+    else:
+        lst = l
+    if isinstance(f, tokenhelp.Function):
+        f = f.get_fn()
+
+    for i in lst:
+        val = f(i, val)
+    return val
 
 
 def my_nth(l, i):
@@ -114,6 +130,7 @@ ns = {
     'read-string': lambda s: reader.read_str(s),
     'slurp': slurp,
     'map': my_map,
+    'reduce': my_reduce,
     'nth': my_nth,
     'first': my_first,
     'rest': my_rest,
