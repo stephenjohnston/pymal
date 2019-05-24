@@ -96,7 +96,7 @@ def main():
     while True:
         try:
             rep(repl_env)
-        except SystemExit:
+        except (EOFError, KeyboardInterrupt, SystemExit):
             break
         except Exception as e:
             print(f"Error: {e.args[0]}")

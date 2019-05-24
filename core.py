@@ -62,11 +62,37 @@ def my_hash_map(l):
     return rslt
 
 
+def sum(nums):
+    x = 0
+    for i in nums:
+        x += i
+    return x
+
+
+def subtract(nums):
+    x = nums[0]
+    for i in nums[1:]:
+        x -= i
+    return x
+
+
+def multiply(nums):
+    x = 1
+    for i in nums:
+        x *= i
+    return x
+
+def divide(nums):
+    x = nums[0]
+    for i in nums[1:]:
+        x /= i
+    return x
+
 ns = {
-    '+': lambda a, b: a + b,
-    '-': lambda a, b: a - b,
-    '*': lambda a, b: a * b,
-    '/': lambda a, b: int(a / b),
+    '+': lambda *args: sum(args),
+    '-': lambda *args: subtract(args),
+    '*': lambda *args: multiply(args),
+    '/': lambda *args: divide(args),
     'prn': prn,
     'str': lambda *x: ''.join(x),
     'list': lambda *x: list(x),
