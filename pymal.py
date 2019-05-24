@@ -4,6 +4,7 @@ import tokenhelp
 import symbols
 import env
 import core
+import vector
 
 
 def mal_read():
@@ -22,8 +23,12 @@ def eval_ast(ast, environ):
         return ast
 
 
-def update_env(e, l):
-    it = iter(l)
+def update_env(e, lst):
+    if isinstance(lst, vector.Vector):
+        l2 = lst.getVal()
+    else:
+        l2 = lst
+    it = iter(l2)
     for x in it:
         e.set(x.getVal(), mal_eval(next(it), e))
 
@@ -57,16 +62,17 @@ def mal_eval(ast, environ):
                     continue
                 elif ast[0].getVal() == 'do':
                     for i in ast[1:len(ast)-1]:
-                        eval_ast(i, environ)
+                        mal_eval(i, environ)
                     ast = ast[len(ast)-1]
                     continue
                 elif ast[0].getVal() == 'fn*':
                     return tokenhelp.Function(ast[2], ast[1].getVal(), environ,
                                               lambda *x: mal_eval(ast[2], env.Env(environ, ast[1].getVal(), x)))
                 elif ast[0].getVal() == 'defn':
-                    fn = lambda *x: mal_eval(ast[3], env.Env(environ, ast[2].getVal(), x))
-                    environ.set(ast[1].getVal(), fn)
-                    return environ.get(ast[1].getVal())
+                    f = tokenhelp.Function(ast[3], ast[2].getVal(), environ,
+                                           lambda *x: mal_eval(ast[3], env.Env(environ, ast[2].getVal(), x)))
+                    environ.set(ast[1].getVal(), f)
+                    return f
 
             eval_list = eval_ast(ast, environ)
             if isinstance(eval_list[0], tokenhelp.Function):

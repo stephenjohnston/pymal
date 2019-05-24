@@ -33,7 +33,6 @@ def my_reduce(f, val, l):
         lst = l
     if isinstance(f, tokenhelp.Function):
         f = f.get_fn()
-
     for i in lst:
         val = f(i, val)
     return val
@@ -100,10 +99,40 @@ def multiply(nums):
 
 
 def divide(nums):
-    x = nums[0]
-    for i in nums[1:]:
+    if isinstance(nums, vector.Vector):
+        numbers = nums.getVal()
+    else:
+        numbers = nums
+    x = numbers[0]
+    for i in numbers[1:]:
         x /= i
     return x
+
+
+def my_filter(f, l):
+    rslt = []
+    if isinstance(l, vector.Vector):
+        lst = l.getVal()
+    else:
+        lst = l
+    if isinstance(f, tokenhelp.Function):
+        f = f.get_fn()
+    for i in lst:
+        if f(i) is True:
+            rslt.append(i)
+    return rslt
+
+
+def my_range(*args):
+    rslt = []
+    num_args = len(args)
+    if num_args == 1:
+        rslt = list(range(args[0]))
+    elif num_args == 2:
+        rslt = list(range(args[0], args[1]))
+    elif num_args == 3:
+        rslt = list(range(args[0], args[1], args[2]))
+    return rslt
 
 
 ns = {
@@ -111,6 +140,7 @@ ns = {
     '-': lambda *args: subtract(args),
     '*': lambda *args: multiply(args),
     '/': lambda *args: divide(args),
+    '%': lambda a, b: a % b,
     'prn': prn,
     'str': lambda *x: ''.join(x),
     'list': lambda *x: list(x),
@@ -134,7 +164,9 @@ ns = {
     'nth': my_nth,
     'first': my_first,
     'rest': my_rest,
-    'hash-map': my_hash_map
+    'hash-map': my_hash_map,
+    'filter': my_filter,
+    'range': my_range
 }
 
 builtins = [
@@ -145,6 +177,10 @@ builtins = [
     '(defn load-file [f] (eval (read-string (str "(do " (slurp f) ")"))))"',
     '(defn true? [b] (= true b))',
     '(defn false? [b] (= false b))',
-    '(defn nil? [v] (= nil v))'
+    '(defn nil? [v] (= nil v))',
+    '(defn is-even? [n] (is-zero? (% n 2)))',
+    '(defn is-odd? [n] (not (is-even? n)))',
+    '(defn or [x y] (if x true (if y true false) (if y true false)))',
+    '(defn and [x y] (if x (if y true false) false))'
 ]
 
