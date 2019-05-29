@@ -7,11 +7,12 @@ class SpecialToken(Enum):
 
 
 class Function:
-    def __init__(self, ast_body, params, env, fn):
+    def __init__(self, ast_body, params, env, fn, is_macro = False):
         self.ast_body = ast_body
         self.params = params
         self.env = env
         self.fn = fn
+        self.is_macro = is_macro
 
     def get_params(self):
         return self.params
@@ -24,3 +25,6 @@ class Function:
 
     def get_fn(self):
         return self.fn
+
+    def get_is_macro(self):
+        return self.is_macro

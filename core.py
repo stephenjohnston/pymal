@@ -1,6 +1,6 @@
 import reader
-import vector
-import tokenhelp
+from vector import Vector
+from tokenhelp import Function
 
 
 def prn(a):
@@ -13,61 +13,25 @@ def slurp(f):
     return f.read()
 
 
-def my_map(f, l):
+def my_map(f, lst):
     rslt = []
-    if isinstance(l, vector.Vector):
-        lst = l.getVal()
-    else:
-        lst = l
-    if isinstance(f, tokenhelp.Function):
+    if isinstance(f, Function):
         f = f.get_fn()
     for i in lst:
         rslt.append(f(i))
     return rslt
 
 
-def my_reduce(f, val, l):
-    if isinstance(l, vector.Vector):
-        lst = l.getVal()
-    else:
-        lst = l
-    if isinstance(f, tokenhelp.Function):
+def my_reduce(f, val, lst):
+    if isinstance(f, Function):
         f = f.get_fn()
     for i in lst:
         val = f(i, val)
     return val
 
 
-def my_nth(l, i):
-    if isinstance(l, vector.Vector):
-        lst = l.getVal()
-    else:
-        lst = l
-    return lst[i]
-
-
-def my_first(l):
-    if isinstance(l, vector.Vector):
-        lst = l.getVal()
-    else:
-        lst = l
-    return lst[0]
-
-
-def my_rest(l):
-    if isinstance(l, vector.Vector):
-        lst = l.getVal()
-    else:
-        lst = l
-    return lst[1:]
-
-
-def my_hash_map(l):
+def my_hash_map(lst):
     rslt = {}
-    if isinstance(l, vector.Vector):
-        lst = l.getVal()
-    else:
-        lst = l
     if len(lst) % 2 != 0:
         raise Exception("Hash-map must be initialized with even number of elements")
     for k in range(0, len(lst), 2):
@@ -77,7 +41,7 @@ def my_hash_map(l):
     return rslt
 
 
-def sum(nums):
+def my_sum(nums):
     x = 0
     for i in nums:
         x += i
@@ -98,24 +62,16 @@ def multiply(nums):
     return x
 
 
-def divide(nums):
-    if isinstance(nums, vector.Vector):
-        numbers = nums.getVal()
-    else:
-        numbers = nums
+def divide(numbers):
     x = numbers[0]
     for i in numbers[1:]:
         x /= i
     return x
 
 
-def my_filter(f, l):
+def my_filter(f, lst):
     rslt = []
-    if isinstance(l, vector.Vector):
-        lst = l.getVal()
-    else:
-        lst = l
-    if isinstance(f, tokenhelp.Function):
+    if isinstance(f, Function):
         f = f.get_fn()
     for i in lst:
         if f(i) is True:
@@ -135,8 +91,18 @@ def my_range(*args):
     return rslt
 
 
+def my_concat(*lstlst):
+    rslt = []
+    for i in lstlst:
+        if isinstance(i, Vector):
+            rslt += i.getVal()
+        else:
+            rslt += i
+    return rslt
+
+
 ns = {
-    '+': lambda *args: sum(args),
+    '+': lambda *args: my_sum(args),
     '-': lambda *args: subtract(args),
     '*': lambda *args: multiply(args),
     '/': lambda *args: divide(args),
@@ -144,13 +110,13 @@ ns = {
     'prn': prn,
     'str': lambda *x: ''.join(x),
     'list': lambda *x: list(x),
-    'vector': lambda *x: vector.Vector(list(x)),
-    'vector?': lambda x: isinstance(x, vector.Vector),
+    'vector': lambda *x: Vector(list(x)),
+    'vector?': lambda x: isinstance(x, Vector),
     'list?': lambda x: isinstance(x, list),
     'empty?': lambda x: len(x) == 0,
     'string?': lambda s: isinstance(s, str),
     'number?': lambda v: isinstance(v, (int, float)),
-    'count': lambda x: len(x),
+    'count': lambda x: len(x.getVal()) if isinstance(Vector, x) else len(x),
     '=': lambda a, b: a == b,
     '<': lambda a, b: a < b,
     '<=': lambda a, b: a <= b,
@@ -161,12 +127,14 @@ ns = {
     'slurp': slurp,
     'map': my_map,
     'reduce': my_reduce,
-    'nth': my_nth,
-    'first': my_first,
-    'rest': my_rest,
+    'nth': lambda lst, n: lst[n],
+    'first': lambda lst: lst[0],
+    'rest': lambda lst: lst[1:],
     'hash-map': my_hash_map,
     'filter': my_filter,
-    'range': my_range
+    'range': my_range,
+    'cons': lambda x, lst: [x] + lst.getVal() if isinstance(lst, Vector) else [x] + lst,
+    'concat': my_concat,
 }
 
 builtins = [

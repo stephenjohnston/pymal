@@ -23,3 +23,7 @@ class Env:
             return env[key]
         else:
             raise Exception(f"undefined identifier: '{key}'")
+
+    def contains(self, key):
+        env = self.find(key)
+        return env is not None

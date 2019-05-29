@@ -1,7 +1,7 @@
 import re
-import symbols
-import tokenhelp
-import vector
+from symbols import Symbol
+from tokenhelp import Function, SpecialToken
+from vector import Vector
 
 
 class Reader:
@@ -55,19 +55,19 @@ def read_vector(r):
     r.next()  # consume the paren
     rslt = []
     tok = read_form(r)
-    while isinstance(tok, symbols.Symbol) is False or (isinstance(tok, symbols.Symbol) is True and tok.getVal() != ']'):
-        if tok != tokenhelp.SpecialToken.COMMENT:
+    while isinstance(tok, Symbol) is False or (isinstance(tok, Symbol) is True and tok.getVal() != ']'):
+        if tok != SpecialToken.COMMENT:
             rslt.append(tok)
         tok = read_form(r)
-    return vector.Vector(rslt)
+    return Vector(rslt)
 
 
 def read_list(r):
     r.next()  # consume the paren
     rslt = []
     tok = read_form(r)
-    while isinstance(tok, symbols.Symbol) is False or (isinstance(tok, symbols.Symbol) is True and tok.getVal() != ')'):
-        if tok != tokenhelp.SpecialToken.COMMENT:
+    while isinstance(tok, Symbol) is False or (isinstance(tok, Symbol) is True and tok.getVal() != ')'):
+        if tok != SpecialToken.COMMENT:
             rslt.append(tok)
         tok = read_form(r)
     return rslt
@@ -90,22 +90,22 @@ def read_atom(r):
         elif tok == 'false':
             return False
         elif tok == 'nil':
-            return tokenhelp.SpecialToken.NIL
+            return SpecialToken.NIL
         elif tok.startswith(';'):
-            return tokenhelp.SpecialToken.COMMENT
+            return SpecialToken.COMMENT
         else:
-            return symbols.Symbol(tok)
+            return Symbol(tok)
 
 
 def pr_str(mal):
-    if isinstance(mal, symbols.Symbol):
+    if isinstance(mal, Symbol):
         return mal.getVal()
-    elif isinstance(mal, vector.Vector):
+    elif isinstance(mal, Vector):
         s = ' '.join(map(pr_str, mal.getVal()))
         return '[' + s + ']'
     elif isinstance(mal, bool):
         return "true" if mal else "false"
-    elif mal == tokenhelp.SpecialToken.NIL:
+    elif mal == SpecialToken.NIL:
         return "nil"
     elif isinstance(mal, str):
         return mal
