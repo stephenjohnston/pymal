@@ -3,8 +3,18 @@ class Env:
         self.data = {}
         self.outer = outer
         if binds is not None and exprs is not None:
-            for b, e in zip(binds, exprs):
-                self.set(b.getVal(), e)
+            for i in range(0, len(binds)):
+                b = binds[i]
+                if b.getVal() != "&":
+                    self.set(b.getVal(), exprs[i])
+                else:
+                    b = binds[i+1]
+                    lst = []
+                    for i2 in range(i, len(exprs)):
+                        lst.append(exprs[i])
+                        i += 1
+                    self.set(b.getVal(), lst)
+                    break
 
     def set(self, key, mal):
         self.data[key] = mal

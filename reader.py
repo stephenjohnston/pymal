@@ -120,7 +120,7 @@ def pr_str(mal):
     elif mal == SpecialToken.NIL:
         return "nil"
     elif isinstance(mal, str):
-        return mal
+        return '"' + mal + '"'
     elif isinstance(mal, list):
         s = ' '.join(map(pr_str, mal))
         return '(' + s + ')'
