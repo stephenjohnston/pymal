@@ -42,6 +42,18 @@ def read_form(r):
         return read_vector(r)
     elif tok.startswith('"'):
         return read_string(r)
+    elif tok == "'":
+        r.next()
+        return [Symbol('quote'), read_form(r)]
+    elif tok == '`':
+        r.next()
+        return [Symbol('quasiquote'), read_form(r)]
+    elif tok == '~':
+        r.next()
+        return [Symbol('unquote'), read_form(r)]
+    elif tok == '~@':
+        r.next()
+        return [Symbol('splice-unquote'), read_form(r)]
     else:
         return read_atom(r)
 
@@ -114,7 +126,6 @@ def pr_str(mal):
         return '(' + s + ')'
     elif callable(mal):
         return "#<function>"
-
     else:
         return str(mal)
 
