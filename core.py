@@ -97,7 +97,8 @@ def my_concat(*lstlst):
         if isinstance(i, Vector):
             rslt += i.getVal()
         else:
-            rslt += i
+            if i is not None:
+                rslt += i
     return rslt
 
 
@@ -141,14 +142,14 @@ builtins = [
     '(defn not [a] (if a false true)))',
     '(defn inc [n] (+ n 1))',
     '(defn dec [n] (- n 1))',
-    '(defn is-zero? [n] (= n 0))',
+    '(defn zero? [n] (= n 0))',
     '(defn load-file [f] (eval (read-string (str "(do " (slurp f) ")"))))"',
     '(defn true? [b] (= true b))',
     '(defn false? [b] (= false b))',
     '(defn nil? [v] (= nil v))',
-    '(defn is-even? [n] (is-zero? (% n 2)))',
-    '(defn is-odd? [n] (not (is-even? n)))',
-    '(defn or [x y] (if x true (if y true false) (if y true false)))',
-    '(defn and [x y] (if x (if y true false) false))'
+    '(defn even? [n] (is-zero? (% n 2)))',
+    '(defn odd? [n] (not (is-even? n)))',
+    '(defmacro! or [x & next] `(if ~x ~x ~(if (nil? next) false `(or ~@next))))',
+    '(defmacro! and [x & next] `(if ~x ~(if (nil? next) x `(and ~@next)) ~x))'
 ]
 

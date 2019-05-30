@@ -110,7 +110,9 @@ def read_atom(r):
 
 
 def pr_str(mal):
-    if isinstance(mal, Symbol):
+    if mal is None:
+        return "nil(None)"
+    elif isinstance(mal, Symbol):
         return mal.getVal()
     elif isinstance(mal, Vector):
         s = ' '.join(map(pr_str, mal.getVal()))
@@ -118,7 +120,7 @@ def pr_str(mal):
     elif isinstance(mal, bool):
         return "true" if mal else "false"
     elif mal == SpecialToken.NIL:
-        return "nil"
+        return "nil(NIL)"
     elif isinstance(mal, str):
         return '"' + mal + '"'
     elif isinstance(mal, list):

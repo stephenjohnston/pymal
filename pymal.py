@@ -8,7 +8,11 @@ from vector import Vector
 
 
 def is_pair(lst):
-    return isinstance(lst, list) and len(lst) > 0
+    if isinstance(lst, list):
+        return len(lst) > 0
+    elif isinstance(lst, Vector):
+        return len(lst.getVal())
+    return False
 
 
 def quasiquote(ast):
@@ -16,7 +20,6 @@ def quasiquote(ast):
         return [Symbol("quote"), ast]
     elif isinstance(ast[0], Symbol) and ast[0].getVal() == "unquote":
         return ast[1]
-
     if is_pair(ast[0]) and isinstance(ast[0][0], Symbol) and ast[0][0].getVal() == "splice-unquote":
         return [Symbol("concat"), ast[0][1], quasiquote(ast[1:])]
     else:
@@ -71,11 +74,8 @@ def macroexpand(ast, env):
 
 
 def mal_eval(ast, environ):
-    ast = macroexpand(ast, environ)
-    if not isinstance(ast, list):
-        return eval_ast(ast, environ)
-
     while True:
+        ast = macroexpand(ast, environ)
         if not isinstance(ast, list):
             return eval_ast(ast, environ)
         elif len(ast) == 0:
@@ -89,6 +89,7 @@ def mal_eval(ast, environ):
                     return ast[1];
                 elif ast[0].getVal() == 'quasiquote':
                     ast = quasiquote(ast[1])
+                    continue
                 elif ast[0].getVal() == 'macroexpand':
                     return macroexpand(ast[1], environ)
                 elif ast[0].getVal() == 'let*':
@@ -166,7 +167,7 @@ def main():
         except (EOFError, KeyboardInterrupt, SystemExit):
             break
         except Exception as e:
-            print(f"Error: {e.args[0]}")
+            print(f"Error: {e}")
 
 
 if __name__ == '__main__':

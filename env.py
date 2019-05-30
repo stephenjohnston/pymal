@@ -1,3 +1,4 @@
+from tokenhelp import SpecialToken
 class Env:
     def __init__(self, outer, binds=None, exprs=None):
         self.data = {}
@@ -13,7 +14,7 @@ class Env:
                     for i2 in range(i, len(exprs)):
                         lst.append(exprs[i])
                         i += 1
-                    self.set(b.getVal(), lst)
+                    self.set(b.getVal(), lst if len(lst) > 0 else SpecialToken.NIL)
                     break
 
     def set(self, key, mal):
